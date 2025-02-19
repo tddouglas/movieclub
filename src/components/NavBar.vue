@@ -26,6 +26,7 @@
 import {ref, computed} from 'vue'
 import {useRoute} from 'vue-router'
 import {useUserStore} from "@/stores/user"
+import router from "@/router";
 
 const route = useRoute()
 const userStore = useUserStore()
@@ -41,5 +42,6 @@ const navItems = [
 
 const logout = async () => {
 	const res = await userStore.logout()
+	await router.push({path: '/login'})
 }
 </script>
