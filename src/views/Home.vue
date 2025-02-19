@@ -2,7 +2,7 @@
 	<div class="min-h-screen flex justify-center m-12 bg-gray-900">
 		<div class="px-4 text-center">
 			<img
-				src="@/../favicon.svg"
+				src="@/assets/movie_icon.svg"
 				alt="Movie Club Logo"
 				class="w-48 h-48 mx-auto mb-10"
 			/>

@@ -2,6 +2,7 @@
 node_modules/
 __pycache__
 venv
+dist/
 
 # local env files
 .env.local
@@ -18,5 +19,5 @@ yarn-error.log*
 .idea
 .vscode
 
-# Stored Queries
+# Stored SAl Queries
 stored_queries/
