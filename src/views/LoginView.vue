@@ -1,40 +1,28 @@
 <template>
-	<div class="mt-8 w-96 md:w-auto">
-		<fwb-heading tag="h1" class="mb-4 text-center">Log In </fwb-heading>
-		<form class="flex flex-col items-center" @submit.prevent="handleLogin">
-			<div>
-				<div class="w-96 md:w-[26rem]">
-					<fwb-input
-						v-model="credentials.email"
-						placeholder="enter your email"
-						class="my-2"
-						required
-					/>
-					<fwb-input
-						v-model="credentials.password"
-						placeholder="enter your password"
-						class="my-2"
-						required
-					/>
+	<div class="relative min-h-screen flex items-center justify-center bg-cover bg-center"
+		 :style="{ backgroundImage: `url(${bgImage})` }">
+		<!-- Dark Overlay -->
+		<div class="absolute inset-0 bg-black bg-opacity-50"></div>
+
+		<!-- Login Form -->
+		<div class="relative bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+			<h2 class="text-2xl font-bold text-gray-800 text-center">Login</h2>
+			<form class="mt-4">
+				<div>
+					<label class="block text-gray-700">Email</label>
+					<input v-model="credentials.email" type="email"
+						   class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black">
 				</div>
-			</div>
-			<div>
-				<fwb-button
-					class="w-44"
-					color="alternative"
-					value="This is the v"
-					:disabled="loading"
-					:loading="loading"
-					@click="handleLogin"
-					>{{ loading ? "" : "Log In" }}
-				</fwb-button>
-			</div>
-		</form>
-		<div class="text-center">
-			<p class="mb-2 mt-6">Don't have an account?</p>
-			<router-link to="signup">
-				<fwb-button gradient="purple-blue">Sign up now</fwb-button>
-			</router-link>
+				<div class="mt-4">
+					<label class="block text-gray-700">Password</label>
+					<input v-model="credentials.password" type="password"
+						   class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black">
+				</div>
+				<button type="submit" @click.prevent="handleLogin"
+						class="w-full mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg transition">
+					Login
+				</button>
+			</form>
 		</div>
 	</div>
 </template>
@@ -43,7 +31,7 @@
 import { ref } from "vue"
 import { useUserStore } from "@/stores/user"
 import { useRouter } from "vue-router"
-import { FwbButton, FwbHeading, FwbInput } from "flowbite-vue"
+import bgImage from '@/assets/movieclub_entertained.jpeg'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -57,9 +45,7 @@ const handleLogin = async () => {
 	try {
 		loading.value = true
 		console.log("Sign in with", credentials)
-		const {data, error} = await userStore.login(credentials.value.email, credentials.value.password)
-		if (error) throw error
-		console.log("user logged in", data.user.email)
+		const data = await userStore.login(credentials.value.email, credentials.value.password)
 		await router.replace("/")
 	} catch (error) {
 		if (error instanceof Error) {

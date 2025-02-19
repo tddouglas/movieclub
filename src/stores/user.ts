@@ -9,26 +9,30 @@ export const useUserStore = defineStore("user", () => {
 
 	// listen for auth events
 	supabase.auth.onAuthStateChange((event, session) => {
+		console.log("Auth event:", event)
 		user.value = session ? session.user : null
 		accessToken.value = session ? session.access_token : ""
 		isLoggedIn.value = !!user.value
 	})
 
-	async function initialized() {
-		if (user.value) return true
-		else {
-			console.log("calling supabase to get user status")
-			const { data, error } = await supabase.auth.getUser()
-			if (error) return null
-			else return !!data.user
+	// Function to load session on app start
+	const loadUserSession = async () => {
+		const { data, error } = await supabase.auth.getSession()
+		if (error) {
+			console.error("Error getting session:", error)
+			return
+		}
+		if (data.session) {
+			user.value = data.session.user
+			accessToken.value = data.session.access_token
+			isLoggedIn.value = !!user.value
 		}
 	}
 
 	async function createAccount(
 		email: string,
 		password: string,
-		firstName?: string,
-		lastName?: string
+		displayName?: string
 	) {
 		return await supabase.auth.signUp({
 			email,
@@ -36,10 +40,18 @@ export const useUserStore = defineStore("user", () => {
 		})
 	}
 	async function login(email: string, password: string) {
-		return await supabase.auth.signInWithPassword({
+		console.log("Logging in user")
+		const { data, error } = await supabase.auth.signInWithPassword({
 			email,
-			password
-		})
+			password,
+		});
+
+		if (error) {
+			console.error("Login Error:", error.message);
+		} else {
+			console.log("user logged in", data)
+		}
+		return data
 	}
 
 	async function logout() {
@@ -53,7 +65,7 @@ export const useUserStore = defineStore("user", () => {
 		user,
 		accessToken,
 		isLoggedIn,
-		initialized,
+		loadUserSession,
 		createAccount,
 		login,
 		logout
