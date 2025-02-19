@@ -76,14 +76,14 @@
 			v-else-if="view === 'orgchart'"
 			class="flex justify-center items-center min-h-[300px] relative"
 		>
-<!--			<img-->
-<!--				src="@/assets/org_chart.png"-->
-<!--				alt="Organization Chart"-->
-<!--				class="max-w-full h-auto transition-opacity duration-500"-->
-<!--				loading="lazy"-->
-<!--				@load="orgChartLoaded = true"-->
-<!--				:class="{'opacity-0': !orgChartLoaded, 'opacity-100': orgChartLoaded}"-->
-<!--			/>-->
+			<!--			<img-->
+			<!--				src="@/assets/org_chart.png"-->
+			<!--				alt="Organization Chart"-->
+			<!--				class="max-w-full h-auto transition-opacity duration-500"-->
+			<!--				loading="lazy"-->
+			<!--				@load="orgChartLoaded = true"-->
+			<!--				:class="{'opacity-0': !orgChartLoaded, 'opacity-100': orgChartLoaded}"-->
+			<!--			/>-->
 			<h2>Coming Soon</h2>
 			<div
 				v-if="!orgChartLoaded"
@@ -146,7 +146,3 @@ onMounted(() => {
 	fetchMembers();
 });
 </script>
-
-<style scoped>
-/* Additional component-specific styles if needed */
-</style>

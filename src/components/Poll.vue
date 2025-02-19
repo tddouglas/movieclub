@@ -91,9 +91,9 @@ const vote = async (optionId, pollId) => {
 	}
 
 	// Insert the new vote
-	const { error: insertError } = await supabase
+	const {error: insertError} = await supabase
 		.from("poll_votes")
-		.insert([{ poll_option_id: optionId, user_id: userId, poll_id: pollId }]);
+		.insert([{poll_option_id: optionId, user_id: userId, poll_id: pollId}]);
 
 	if (insertError) {
 		console.error("Error inserting new vote:", insertError);

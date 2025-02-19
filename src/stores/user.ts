@@ -1,6 +1,6 @@
-import { ref } from "vue"
-import { defineStore } from "pinia"
-import { supabase } from "@/database/supabaseClient"
+import {ref} from "vue"
+import {defineStore} from "pinia"
+import {supabase} from "@/database/supabaseClient"
 
 export const useUserStore = defineStore("user", () => {
 	const user = ref()
@@ -17,7 +17,7 @@ export const useUserStore = defineStore("user", () => {
 
 	// Function to load session on app start
 	const loadUserSession = async () => {
-		const { data, error } = await supabase.auth.getSession()
+		const {data, error} = await supabase.auth.getSession()
 		if (error) {
 			console.error("Error getting session:", error)
 			return
@@ -39,9 +39,10 @@ export const useUserStore = defineStore("user", () => {
 			password
 		})
 	}
+
 	async function login(email: string, password: string) {
 		console.log("Logging in user")
-		const { data, error } = await supabase.auth.signInWithPassword({
+		const {data, error} = await supabase.auth.signInWithPassword({
 			email,
 			password,
 		});
