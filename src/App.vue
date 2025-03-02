@@ -1,5 +1,5 @@
 <template>
-	<div class="min-h-screen bg-gray-900 text-white">
+	<div class="min-h-screen bg-main text-main">
 		<NavBar v-if="userStore.isLoggedIn"/>
 		<main :class="[userStore.isLoggedIn ? 'container mx-auto pt-20' : '']">
 			<router-view></router-view>
@@ -15,7 +15,7 @@ const userStore = useUserStore()
 userStore.loadUserSession() // Loading user session on app startup
 </script>
 
-<style>
+<style scoped>
 #app {
 	width: 100%;
 	margin: 0 auto;

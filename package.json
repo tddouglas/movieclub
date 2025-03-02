@@ -1,7 +1,7 @@
 {
   "name": "movie-club-website",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,8 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@headlessui/vue": "^1.7.16",
-    "@heroicons/vue": "^2.0.18",
     "@supabase/supabase-js": "^2.48.1",
     "@vueuse/core": "^10.6.1",
     "chart.js": "^4.4.1",

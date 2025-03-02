@@ -1,7 +1,7 @@
 <template>
 	<div class="bg-black/50 shadow-md rounded-lg p-4">
 		<h2 class="text-lg font-semibold">{{ poll.question }}</h2>
-		<div class="mt-4 space-y-2">
+		<div v-if="options.length > 0" class="mt-4 space-y-2">
 			<div
 				v-for="option in options"
 				:key="option.id"
@@ -24,6 +24,9 @@
 					{{ option.text }} ({{ votes[option.id] || 0 }} votes)
 				</button>
 			</div>
+		</div>
+		<div v-else>
+			No Options
 		</div>
 	</div>
 </template>

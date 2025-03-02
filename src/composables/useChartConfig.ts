@@ -1,26 +1,39 @@
 import {ChartOptions} from 'chart.js'
 
-export function useChartConfig() {
+export function useChartConfig(chartTitle: string) {
 	const chartOptions: ChartOptions = {
+		indexAxis: 'y', // Horizontal bars
 		responsive: true,
 		maintainAspectRatio: false,
 		plugins: {
+			title: {
+				display: true,
+				text: chartTitle,
+				font: {weight: 'bold', size: 15},
+				padding: {bottom: 15}
+			},
 			legend: {
-				position: 'right',
+				display: false,
 				labels: {
-					color: 'white',
-					font: {
-						size: 12
-					}
+					boxWidth: 10
+				}
+			}
+		},
+		scales: {
+			x: {
+				stacked: true,
+				title: {
+					display: true,
+					text: 'Number of Movies'
+				},
+				ticks: {
+					stepSize: 1
 				}
 			},
-			tooltip: {
-				callbacks: {
-					label: (context: any) => {
-						const label = context.label || ''
-						const value = context.raw || 0
-						return `${label}: ${value} attendances`
-					}
+			y: {
+				stacked: true,
+				title: {
+					display: false
 				}
 			}
 		}
@@ -35,8 +48,31 @@ export function useChartConfig() {
 		return Array(count).fill(0).map((_, i) => colors[i % colors.length])
 	}
 
+	// Hardcoded data for testing
+	const hardcodedChartJsData = () => {
+		return {
+			labels: ['Tyler', 'Caleb', 'Nikhil', 'Shannah', 'David', 'Shosh'], // would need to be sorted person list
+			// Dataset structure takes an object with label = Movie title and data = array of parent labels index where data[n] = provide data[n] point to the person for position labels[n]
+			datasets: [
+				{
+					label: 'Banchees',
+					data: [1, 1, 0, 1, 0, 0]
+				},
+				{
+					label: 'Nope',
+					data: [1, 1, 1, 0, 0, 1]
+				},
+				{
+					label: 'The Worst Person in the World',
+					data: [1, 0, 0, 1, 1, 1]
+				}
+			]
+		}
+	}
+
 	return {
 		chartOptions,
-		generateChartColors
+		generateChartColors,
+		hardcodedChartJsData
 	}
 }
