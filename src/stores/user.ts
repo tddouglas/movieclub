@@ -3,16 +3,23 @@ import {defineStore} from "pinia"
 import {supabase} from "@/database/supabaseClient"
 
 export const useUserStore = defineStore("user", () => {
-	const user = ref()
+	const authUser = ref()
 	const accessToken = ref("")
 	const isLoggedIn = ref(false)
+	const profile = ref()
 
 	// listen for auth events
 	supabase.auth.onAuthStateChange((event, session) => {
 		console.log("Auth event:", event)
-		user.value = session ? session.user : null
+		authUser.value = session ? session.user : null
 		accessToken.value = session ? session.access_token : ""
-		isLoggedIn.value = !!user.value
+		isLoggedIn.value = !!authUser.value
+
+		if (authUser.value) {
+			loadUserProfile()
+		} else {
+			profile.value = null
+		}
 	})
 
 	// Function to load session on app start
@@ -23,9 +30,26 @@ export const useUserStore = defineStore("user", () => {
 			return
 		}
 		if (data.session) {
-			user.value = data.session.user
+			authUser.value = data.session.user
 			accessToken.value = data.session.access_token
-			isLoggedIn.value = !!user.value
+			isLoggedIn.value = !!authUser.value
+			await loadUserProfile()
+		}
+	}
+
+	// Function to load the full user profile from the 'users' table using the user's id
+	async function loadUserProfile() {
+		if (authUser.value && authUser.value.id) {
+			const {data, error} = await supabase
+				.from('users')
+				.select('*')
+				.eq('id', authUser.value.id)
+				.single()
+			if (error) {
+				console.error("Error loading user profile:", error)
+				return
+			}
+			profile.value = data
 		}
 	}
 
@@ -51,21 +75,24 @@ export const useUserStore = defineStore("user", () => {
 			console.error("Login Error:", error.message);
 		} else {
 			console.log("user logged in", data)
+			await loadUserProfile()
 		}
 		return data
 	}
 
 	async function logout() {
 		console.log("Signing out")
-		user.value = null
+		authUser.value = null
 		accessToken.value = ""
+		profile.value = null
 		return await supabase.auth.signOut()
 	}
 
 	return {
-		user,
+		user: authUser,
 		accessToken,
 		isLoggedIn,
+		profile,
 		loadUserSession,
 		createAccount,
 		login,
