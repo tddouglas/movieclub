@@ -1,98 +1,140 @@
-# MovieClub
+# Movie Club
 
-todo:
+![Movieclub Website Banner](src/assets/github/movie_club_banner.png)
 
-1. Create Movie Club History Page
-    - Season attendance with stacked bar chart. Can hover over entries for more details.
-    - Lifetime attendance with stacked bar chart (might need to remove labels from bar chart if it gets too crowded)
-    - Things to fix in history page
-      - [x]Data not showing up after refresh. Only displays in chart after toggle for some reason. Maybe related to
-      composable
-        - []Theres weird sizing on charts depending on # of items. Because # of items isn't consistent, need to make
-          sure
-          width and heigh are always the same
-          - [x]Something wrong with filtering on season. Need to review filtering logic
-        - []If I can somehow fix it, need to adjust right chart expansion transition logic
-        - []Add loading items to the charts before the data renders.
-2. [x] Improve mobile menu
-   - Move hamburger SVG into assets
-3. Admin Console to automatically log movies via:
-    - See [Admin Poll Create Process]() below
-4. Should probably at Phone Number as a column at some point either for phone number based authentication or for
-   ability to tie to movie club text chat
-   < Version 1 Release >
-5. Live vote tracking in nominations to see who voted for what film. 1 person voting at a time
-6. Check out Ranked Choice voting
-7. Need Ability to see who nominated which movie
-8. Enable RLS so only logged in users can access Supabase instance
-9. Nominations should have past movie club votes with all options and their ultimate outcomes.
-10. Add current selection order
-11. Add Movie Club Commandments somewhere to the website
-12. Add previous award histories to the website
-13. Add proper Org Chart
-14. Letterboxd top for on members page
-    - If Letterboxd doesn't work via their API. Could look to access info
-      via [The MovieDB](https://letterboxd.com/about/film-data/)
-15. Ability to generate selection order
-16. Some sort of "meet the members" page?
-17. Add google calendar input with calendar of club meetings
-18. Implement testing framework
-19. Implement deployment pipeline which auto-deploys testing framework using vercel dev/staging/prod environments
 
-### Admin Poll Create Process
+## Table of Contents
 
-1. Create Poll
-2. Close poll -> polls active = False && closed_at = time_now()
-3. Create entry in `movies` Table with winner of Movie Club poll
-4. Fetch current season -> `season_id`
-5. Insert into `club_sessions` with season `season_id` fetched from previous step, `poll_id`, and
-   `winning_movie_id` from previous step
+1. [Project Overview](#project-overview)
+2. [Features](#features)
+3. [Setup and Installation](#setup-and-installation)
+4. [Usage](#usage)
+5. [Contributing](#contributing)
+6. [License](#license)
+7. [Contact](#contact)
 
-### Selecting all movie club history
+---
 
-#### Option 1:
+## Project Overview
 
-- Select `season_id` (seasons),  `poll_id`, `winning_movie_id` (club_sessions), `title`
-  (movies), all users who voted in a specific poll (poll_votes) table
-- Table of all previous movie winners in order below bar charts
+**Movie Club** is a community-driven platform where users can discover, discuss, and rate movies. It aims to
+bring together film enthusiasts of all levels, allowing them to set up groups to facilitate in-person film viewings, 
+discussion, and reviews. 
 
-Pros:
+![Screenshot of the Movieclub Website Home Page](src/assets/github/club_screenshots.png)
 
-- Doesn't duplicate entries in the DB. Option 2, we are kinda keeping entries duplicated in club_attendance table
-- 1 fewer step in the creation of a movie club entry
+---
 
-Cons:
+## Features
+- **Randomized Member Movie Order**
+  When the first club meeting is kicked off, Movie Club automatically generates a random nomination order.
 
-- DB should reflect that we didn't actually count data properly for first 3 seasons. How to show that?
-    - For backfill, reflect cast_at as null
+- **Live Selection Voting**  
+  When a user is nominating films, Movie Club compiles the nominated movies for a vote, showing real time results.
 
-#### Option 2:
+- **Ratings & Reviews**  
+  Share your opinions with star ratings and detailed text reviews for each movie.
 
-- Utilize club_attendance table. Everytime there a poll is closed, we add that person entries into the
-  `club_attendance` table
+- **Watch History**  
+  Keep track of movies you've previously watched as a group with full watch and vote history as well as attendance 
+  breakdowns. 
 
-Pros:
+- **Responsive UI**  
+  Mobile first design enables easy use by anyone on a couch, in the theater, or on the go.
 
-- Easier to back fill data for past clubs which we don't have exact attendance data for. Can just create an entrty
-  per user per session as many times as necessary.
-    - But that is still per session so would still need to assign users to specific sessions.
-- Makes it easier to tell when a session was actually "counted" on a per attendance basis vs. not by building that
-  logic into
+- **User Authentication**  
+  Users can log in using email or text based authentication to ensure only club members have access.
 
-## Back fill Process
 
-Inputs = `season_id` for season this movie club was apart of & `movie_id` for Movie that won & `date` for rough
-date of movie club w/o timestamp
+---
 
-1. Create `polls` entry for the movie club session in question -> `polls.id`
-2. Create `poll_options` entry with `poll_id`, `text`= "What Movie Should we Watch?", `created_at` = Null
-3. create `club_sessions` entry w/ date, season_id, poll_id, movie_id, created_at = null
-4. Output `polls.id`, `polls_options.id`, `club_sessions.id`
+## Setup and Installation
 
-2nd step, for each club session in Season 1-3:
-Take input of `polls`, and `poll_options_id` from previous script as well as `user_id`
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/YourUserName/Movieclub-Website.git
+   cd Movieclub-Website
+   
+2. **Install Dependencies**
+   ```bash
+   npm i
 
-1. Create `poll_votes` entry w/ `poll_option_id`, `user_id` and `poll_id` w/ `cast_at` = null
-   Will need to do this manually for each user, assigning them to specific movie clubs
+3. **Configure Environment Vars**
+   ```bash
+   VITE_SUPABASE_URL={{supabase_url}}
+   VITE_SUPABASE_ANON_KEY={{supabase_anon_key}}
+   
+4. **Start Frontend**
+   ```bash
+   npm run dev
 
+---
+
+## Usage
+
+1. Sign Up / Login 
+   - Register a new account via the /signup route. 
+   - Login through the /login route using your credentials.
+ 
+2. Generate a selection order
+   - The club admin can generate a random selection order comprised of the existing movie club member roster.
+
+3. Nominate Films
+   - When a user is "up" in the selection order, they will be able to nominate 3-4 films.
+   - That user can add their picks in app.
+
+4. Live Vote
+   - When the club meets, the nominator can start a live poll. 
+   - All present users will be able to vote on their preferred film
+
+5. Watch History
+   - After a viewing, the poll will close and be available in the club history page showcasing attendance and 
+     previous watches.
+
+---
+
+## Contributing
+
+Contributions are welcome! To contribute:
+
+1. Fork the repository.
+
+2. Create a feature branch:
+   ```bash
+   git checkout -b feature/my-new-feature
+
+3. Commit your changes:
+   ```bash
+   git commit -m "Add new feature"
+   
+4. Push the branch:
+   ```bash
+   git push origin feature/my-new-feature
+   
+5. Open a pull request describing your changes.
+
+Please ensure that your contributions include tests and adhere to the project's coding standards.
+
+---
+
+## License
+
+This project is licensed under the MIT License.
+```
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+```
+
+---
+
+## Contact
+
+- Project Maintainer: Tyler
+- Website: movieclub.com
+
+For questions, issues, or suggestions, please open an issue in the repository or reach out directly.
+<!-- PLACEHOLDER for additional images or badges, such as build status or test coverage badges. Example: ![Build Status Badge](path/to/build_status_badge.png) -->
 
