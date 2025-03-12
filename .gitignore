@@ -3,7 +3,6 @@ node_modules/
 __pycache__
 venv
 dist/
-roadmap.md
 
 # local env files
 .env.local

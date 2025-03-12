@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import {ref, onMounted} from "vue";
 import {supabase} from "@/database/supabaseClient"
-import Poll from "@/components/Poll.vue";
+import Poll from "@/components/polls/Poll.vue";
 
 const polls = ref([]);
 
