@@ -33,8 +33,8 @@
 
 <script setup lang="ts">
 import {ref, computed, onMounted} from "vue";
-import {useUserStore} from "@/stores/user"
-import {supabase} from "@/database/supabaseClient"
+import {useUserStore} from "@/stores/user.ts"
+import {supabase} from "@/database/supabaseClient.ts"
 
 const userStore = useUserStore()
 const props = defineProps(["poll"]);
@@ -75,7 +75,7 @@ const vote = async (optionId, pollId) => {
 		.select("id, poll_option_id")
 		.eq("user_id", userId)
 		.eq("poll_id", pollId)
-		.single()
+		.maybeSingle()
 
 	if (existingVote && existingVote.poll_option_id === optionId) {
 		console.log("User has already voted for this option, no changes needed.");

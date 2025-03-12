@@ -16,6 +16,10 @@
 							class="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"
 						></span>
 					</router-link>
+					<router-link v-if="userProfile?.admin" to="/admin"
+								 class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium hover:border-secondary hover:text-gray">
+						Admin
+					</router-link>
 					<div
 						@click="logout"
 						class="relative group cursor-pointer hover:text-primary transition-colors duration-200"
@@ -74,6 +78,13 @@
 								class="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"
 							></span>
 						</router-link>
+						<router-link v-if="userProfile?.admin" to="/admin"
+									 class="relative group block focus:text-primary transition-colors duration-200 py-4">
+							Admin
+							<span
+								class="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"
+							></span>
+						</router-link>
 						<div
 							@click="handleLogout"
 							class="relative group cursor-pointer focus:text-primary transition-colors duration-200 py-4"
@@ -92,14 +103,13 @@
 
 <script setup lang="ts">
 import {ref, computed} from 'vue'
-import {useRoute} from 'vue-router'
-import {useUserStore} from "@/stores/user"
+import {useUserStore} from "@/stores/user.ts"
 import router from "@/router"
 
-const route = useRoute()
 const userStore = useUserStore()
-const currentPath = computed(() => route.path)
 const menuOpen = ref(false)
+
+const userProfile = computed(() => userStore.profile);
 
 const navItems = [
 	{name: 'Home', path: '/'},

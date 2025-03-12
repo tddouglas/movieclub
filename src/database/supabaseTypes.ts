@@ -1,3 +1,4 @@
+// Can be downloaded from supabase dashboard `/api?page=tables-intro`
 export type Json =
   | string
   | number
