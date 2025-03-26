@@ -32,18 +32,30 @@
 </template>
 
 <script setup lang="ts">
-import {ref, computed, onMounted} from "vue";
+import {ref, computed, onMounted, PropType} from "vue";
 import {useUserStore} from "@/stores/user.ts"
 import {supabase} from "@/database/supabaseClient.ts"
+import type {Tables} from "@/database/supabaseTypes.ts"
+import {Poll, VotesMapping} from "@/components/polls/pollTypes.ts"
+
+type PollOptions = Tables<"poll_options">
 
 const userStore = useUserStore()
-const props = defineProps(["poll"]);
-const options = ref([]);
-const votes = ref({});
+const props = defineProps({
+	poll: {type: Object as PropType<Poll>, required: true}
+})
+const options = ref<PollOptions[]>([])
+const votes = ref<VotesMapping>({})
 
 const fetchOptions = async () => {
-	let {data, error} = await supabase.from("poll_options").select("*").eq("poll_id", props.poll.id);
-	if (error) console.error(error);
+	if (!props.poll.id) {
+		throw new Error("No poll found")
+	}
+
+	let {data, error} = await supabase.from("poll_options")
+		.select("*")
+		.eq("poll_id", props.poll.id)
+	if (error || !data) console.error(error);
 	else options.value = data;
 };
 
@@ -57,16 +69,16 @@ const fetchVotes = async () => {
 
 	// console.log(`Vote res is: ${JSON.stringify(data)}`);
 
-	if (error) console.error(error);
-	else votes.value = data.reduce((acc, entry) => {
-		const id = entry.poll_option_id;
-		acc[id] = (acc[id] || 0) + 1;
-		return acc;
-	}, {})
+	if (error || !data) console.error(error);
+	else votes.value = data.reduce((acc: VotesMapping, entry): VotesMapping => {
+		const id = entry.poll_option_id
+		acc[id] = (acc[id] || 0) + 1
+		return acc
+	}, {} as VotesMapping)
 };
 
 // Place Vote - If User already voted, update vote
-const vote = async (optionId, pollId) => {
+const vote = async (optionId: string, pollId: string) => {
 	const userId = userStore.user.id;
 
 	// Check if the user has already voted in this poll
@@ -111,13 +123,13 @@ const totalVotes = computed(() => {
 });
 
 // Get vote percentage for each option
-const getVotePercentage = (optionId) => {
+const getVotePercentage = (optionId: string) => {
 	if (totalVotes.value === 0) return 0;
 	return (votes.value[optionId] || 0) / totalVotes.value * 100;
 };
 
 // Dynamically change color intensity based on votes
-const getVoteColor = (optionId) => {
+const getVoteColor = (optionId: string) => {
 	const baseColor = 100 + Math.min(8 * (votes.value[optionId] || 0), 800); // Scale color from blue-100 to blue-900
 	return `rgb(59, 130, 246, ${0.3 + Math.min(0.7, (votes.value[optionId] || 0) / 10)})`; // Adjust opacity
 };

@@ -16,9 +16,12 @@
 							class="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"
 						></span>
 					</router-link>
-					<router-link v-if="userProfile?.admin" to="/admin"
-								 class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium hover:border-secondary hover:text-gray">
+					<router-link v-if="userProfile?.admin" key="admin" to="/admin"
+								 class="relative group hover:text-primary transition-colors duration-200">
 						Admin
+						<span
+							class="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"
+						></span>
 					</router-link>
 					<div
 						@click="logout"
@@ -36,22 +39,13 @@
             Welcome, {{ userStore.profile.display_name }}
           </span>
 					<button @click="menuOpen = !menuOpen" class="text-white focus:outline-none">
-						<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path
-								v-if="!menuOpen"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M4 6h16M4 12h16M4 18h16"
-							/>
-							<path
-								v-else
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M6 18L18 6M6 6l12 12"
-							/>
-						</svg>
+						<img
+							 :src="!menuOpen ? navbarHamburger : navbarX"
+							 alt="Navbar Menu Open/Close"
+							 key="test"
+							 class="h-6 w-6"
+							 :class="{ 'p-1': menuOpen }"
+						>
 					</button>
 				</div>
 			</div>
@@ -78,7 +72,9 @@
 								class="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"
 							></span>
 						</router-link>
-						<router-link v-if="userProfile?.admin" to="/admin"
+						<router-link v-if="userProfile?.admin"
+									 to="/admin"
+									 @click="menuOpen = false"
 									 class="relative group block focus:text-primary transition-colors duration-200 py-4">
 							Admin
 							<span
@@ -105,6 +101,8 @@
 import {ref, computed} from 'vue'
 import {useUserStore} from "@/stores/user.ts"
 import router from "@/router"
+import navbarHamburger from '@/assets/navbar_hamburger.svg'
+import navbarX from '@/assets/navbar_x.svg'
 
 const userStore = useUserStore()
 const menuOpen = ref(false)

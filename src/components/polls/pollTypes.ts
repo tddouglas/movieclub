@@ -18,9 +18,11 @@ interface PollVoteCount {
 	text: string;
 }
 
+type VotesMapping = Record<string, number>
+
 // Define the type for the PollCrud instance including the exposed enableButton method.
 type PollCrudInstance = ComponentPublicInstance<{
 	enableButton: () => void
 }>
 
-export type {Poll, PollOption, PollVoteCount, PollCrudInstance}
+export type {Poll, PollOption, PollVoteCount, PollCrudInstance, VotesMapping}

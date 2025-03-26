@@ -64,7 +64,7 @@ export const useUserStore = defineStore("user", () => {
 		})
 	}
 
-	async function login(email: string, password: string) {
+	async function loginEmail(email: string, password: string) {
 		console.log("Logging in user")
 		const {data, error} = await supabase.auth.signInWithPassword({
 			email,
@@ -79,6 +79,35 @@ export const useUserStore = defineStore("user", () => {
 		}
 		return data
 	}
+
+	// Send OTP for SMS login
+	async function sendOtp(phone: string) {
+		console.log("Sending OTP to", phone);
+		const { error } = await supabase.auth.signInWithOtp({ phone });
+		if (error) {
+			console.error("OTP Error:", error.message);
+			throw error;
+		}
+	}
+
+	// Verify the OTP for SMS login
+	async function verifySmsOtp(phone: string, otp: string) {
+		console.log("Verifying OTP for", phone);
+		const { data, error } = await supabase.auth.verifyOtp({
+			phone,
+			token: otp,
+			type: 'sms'
+		});
+		if (error) {
+			console.error("OTP Verification Error:", error.message);
+			throw error;
+		} else {
+			console.log("SMS Login Successful:", data);
+			await loadUserProfile();
+		}
+		return data;
+	}
+
 
 	async function logout() {
 		console.log("Signing out")
@@ -95,7 +124,9 @@ export const useUserStore = defineStore("user", () => {
 		profile,
 		loadUserSession,
 		createAccount,
-		login,
+		loginEmail,
+		sendOtp,
+		verifySmsOtp,
 		logout
 	}
 })
