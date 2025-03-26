@@ -22,6 +22,6 @@ const fetchPolls = async () => {
 	else polls.value = data;
 };
 
-onMounted(fetchPolls);
+onMounted(fetchPolls)
 </script>
 

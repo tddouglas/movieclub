@@ -76,25 +76,31 @@ function formatMovieData(data: AttendanceObject[], seasonId?: string): ChartData
 	// Filter the data if a seasonId is provided.
 	const filteredData = seasonId
 		? data.filter(entry => entry.season_id === seasonId)
-		: data;
+		: data
 
-	// Extract unique display names in order of first appearance.
-	const labels = Array.from(new Set(filteredData.map(entry => entry.display_name)));
+	// Compute a count for each display name (total movies watched)
+	const labelCounts = filteredData.reduce((acc: Record<string, number>, entry) => {
+		acc[entry.display_name] = (acc[entry.display_name] || 0) + 1;
+		return acc;
+	}, {} as Record<string, number>)
 
-	// Extract unique movie titles.
-	const movieTitles = Array.from(new Set(filteredData.map(entry => entry.title)));
+	// Extract unique display names and sort them descending by total movies watched.
+	const labels = Array.from(new Set(filteredData.map(entry => entry.display_name)))
+		.sort((a, b) => labelCounts[b] - labelCounts[a])
 
-	// Build datasets for each unique movie title.
+	// Extract unique movie titles (options). If you want these sorted as well, you can do similar logic.
+	const movieTitles = Array.from(new Set(filteredData.map(entry => entry.title)))
+
+	// Build datasets for each movie title.
+	// For each sorted label, we check if there's at least one attendance record for the current movie.
 	const datasets = movieTitles.map(title => {
-		// For each display name, check if there's an entry with the current title.
 		const dataArray = labels.map(name =>
 			filteredData.some(entry => entry.display_name === name && entry.title === title) ? 1 : 0
 		);
-
-		return {label: title, data: dataArray};
+		return {label: title, data: dataArray}
 	});
 
-	return {labels, datasets};
+	return {labels, datasets}
 }
 
 onMounted(async () => {

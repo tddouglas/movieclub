@@ -12,7 +12,7 @@
 					 class="cursor-pointer transition transform duration-300 hover:scale-125">
 			</transition>
 		</div>
-		<div class="h-full max-h-1/2 overflow-y-scroll md:overflow-hidden">
+		<div class="h-96 overflow-y-scroll">
 			<div class="relative" :style="{height: chartHeight}">
 				<canvas ref="canvas"></canvas>
 			</div>
@@ -51,7 +51,7 @@ const toggleExpand = (): void => {
 
 const chartHeight = computed(() => {
 	if (props.chartData) {
-		const height = props.chartData.labels.length < 4 ? 350 : Math.min((props.chartData.labels.length * 60), 350)
+		const height = Math.max((props.chartData.labels.length * 60), 350)
 		return `${height.toString()}px`
 	} else {
 		return "200px"
