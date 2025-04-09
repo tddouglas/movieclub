@@ -15,7 +15,7 @@ import {supabase} from "@/database/supabaseClient"
 import {useUserStore} from "@/stores/user"
 import router from "@/router"
 import PollCrud from "@/components/polls/PollCRUD.vue";
-import CardBox from "@/components/CardBox.vue";
+import CardBox from "@/components/movieClubUI/CardBox.vue";
 import type {Poll, PollCrudInstance} from "@/components/polls/pollTypes"
 
 const userStore = useUserStore()

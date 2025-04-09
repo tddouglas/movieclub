@@ -80,7 +80,7 @@ import {ref} from 'vue';
 import {useUserStore} from '@/stores/user';
 import {useRouter} from 'vue-router';
 import bgImage from '@/assets/movieclub_entertained.jpeg';
-import MovieClubButton from "@/components/MovieClubButton.vue";
+import MovieClubButton from "@/components/movieClubUI/MovieClubButton.vue";
 
 const router = useRouter();
 const userStore = useUserStore();

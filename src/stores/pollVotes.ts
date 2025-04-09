@@ -1,15 +1,17 @@
 import {defineStore} from 'pinia'
 import {ref} from 'vue'
 import {supabase} from '@/database/supabaseClient'
-import type {PollVotesPerUser} from '@/components/polls/pollTypes'
+import {usePollSummaries} from '@/composables/fetchAllVotes.ts'
+import type {PollSummary, PollVotesPerUser} from '@/components/polls/pollTypes'
 
 export const usePollVotesStore = defineStore('pollVotes', () => {
 	// State to store votes
 	const votes = ref<PollVotesPerUser[]>([])
+	const allVotes = ref<Record<string, PollSummary>>({})
 	let subscription: any = null
 
 	// Fetch initial votes for a given poll_id
-	async function fetchVotes(poll_id: string) {
+	async function fetchPollVotes(poll_id: string) {
 		const {data} = await supabase
 			.from('poll_votes')
 			.select(`
@@ -31,6 +33,21 @@ export const usePollVotesStore = defineStore('pollVotes', () => {
 		votes.value = data
 	}
 
+	// Fetch All Votes Grouped by poll_id. Use fetchAllVotes composable
+	async function fetchAllVotes() {
+		const {
+			pollSummaries: compPollSummaries,
+			loading: compLoading,
+			error: compError,
+			fetchPollData
+		} = usePollSummaries()
+
+		// Fetch the poll data using the composable
+		await fetchPollData()
+
+		allVotes.value = compPollSummaries.value
+	}
+
 	// Subscribe to new votes for a given poll_id
 	async function subscribeToPollVotes(poll_id: string) {
 		if (!subscription) {
@@ -41,7 +58,7 @@ export const usePollVotesStore = defineStore('pollVotes', () => {
 					(payload) => {
 						// Only update if the vote is for the correct poll
 						if (payload.new.poll_id === poll_id) {
-							fetchVotes(poll_id)
+							fetchPollVotes(poll_id)
 						}
 					})
 				.subscribe()
@@ -55,5 +72,5 @@ export const usePollVotesStore = defineStore('pollVotes', () => {
 		}
 	}
 
-	return {votes, fetchVotes, subscribeToPollVotes, unsubscribe}
+	return {votes, allVotes, fetchVotes: fetchPollVotes, fetchAllVotes, subscribeToPollVotes, unsubscribe}
 })

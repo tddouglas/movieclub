@@ -20,7 +20,7 @@ import {supabase} from "@/database/supabaseClient"
 import Poll from "@/components/polls/Poll.vue"
 import type {Tables} from "@/database/supabaseTypes.ts"
 import PollLiveVotes from "@/components/polls/PollLiveVotes.vue";
-import CardBox from "@/components/CardBox.vue";
+import CardBox from "@/components/movieClubUI/CardBox.vue";
 
 type PollType = Tables<"polls">
 

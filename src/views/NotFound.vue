@@ -15,5 +15,5 @@
 </template>
 
 <script setup lang="ts">
-import CardBox from "@/components/CardBox.vue";
+import CardBox from "@/components/movieClubUI/CardBox.vue";
 </script>

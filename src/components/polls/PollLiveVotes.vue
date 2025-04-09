@@ -39,7 +39,7 @@ import {onMounted, onUnmounted} from 'vue'
 import {useUserStore} from "@/stores/user.ts"
 import {usePollVotesStore} from "@/stores/pollVotes.ts"
 import {storeToRefs} from 'pinia'
-import MovieClubDivider from "@/components/MovieClubDivider.vue"
+import MovieClubDivider from "@/components/movieClubUI/MovieClubDivider.vue"
 
 const userStore = useUserStore()
 const pollVotesStore = usePollVotesStore()

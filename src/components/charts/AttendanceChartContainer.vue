@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col md:flex-row items-center mt-4 md:p-20">
+	<div class="flex flex-col md:flex-row items-center mt-4">
 		<section v-if="expandedChart === null || expandedChart === 'left'"
 				 :class="[expandedChart === 'left' ? 'w-full' : 'w-11/12 md:w-1/2 md:mr-4',
 				 'mb-4 transition-all duration-500 ease-in-out']">
@@ -23,7 +23,7 @@
 import {ref, onMounted} from 'vue'
 import {supabase} from '@/database/supabaseClient'
 import StackedBarChart from '@/components/charts/StackedBarChart.vue'
-import CardBox from '@/components/CardBox.vue'
+import CardBox from '@/components/movieClubUI/CardBox.vue'
 import type {AttendanceObject, ChartDataObject} from "@/components/charts/chartTypes.ts"
 import {validateEntry} from "@/components/charts/chartTypes.ts"
 

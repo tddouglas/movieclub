@@ -88,9 +88,9 @@
 import {ref, onMounted, watch, PropType} from 'vue';
 import {supabase} from "@/database/supabaseClient"
 import type {PollOption, PollVoteCount} from "@/components/polls/pollTypes.ts";
-import MovieClubInputs from '@/components/MovieClubInput.vue';
-import MovieClubButton from "@/components/MovieClubButton.vue";
-import MovieClubInputTitle from "@/components/MovieClubInputTitle.vue";
+import MovieClubInputs from '@/components/movieClubUI/MovieClubInput.vue';
+import MovieClubButton from "@/components/movieClubUI/MovieClubButton.vue";
+import MovieClubInputTitle from "@/components/movieClubUI/MovieClubInputTitle.vue";
 
 
 const props = defineProps({
