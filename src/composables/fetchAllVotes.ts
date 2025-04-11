@@ -72,7 +72,7 @@ export function usePollSummaries() {
 		try {
 			const rawData = await fetchVoteSummaries()
 			const formattedVoteSummaries = formatVoteSummaries(rawData)
-			console.log("Formatted vote summaries are:\n", formattedVoteSummaries)
+			// console.log("Formatted vote summaries are:\n", formattedVoteSummaries)
 			pollSummaries.value = formattedVoteSummaries
 		} catch (err) {
 			error.value = err as Error

@@ -52,7 +52,7 @@ const fetchActivePolls = async () => {
 		}))
 	}))
 	if (activePolls.value.length === 0) {
-		console.log("Adding to poll")
+		// console.log("Adding to poll")
 		activePolls.value.push({
 			id: null,
 			question: "",
