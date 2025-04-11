@@ -1,4 +1,5 @@
 <template>
+	<Analytics />
 	<div class="min-h-screen bg-main text-main">
 		<NavBar v-if="userStore.isLoggedIn"/>
 		<main :class="[userStore.isLoggedIn ? 'container mx-auto pt-20' : '']">
@@ -9,6 +10,7 @@
 
 <script setup lang="ts">
 import NavBar from './components/navbar/NavBar.vue'
+import { Analytics } from '@vercel/analytics/vue'
 import {useUserStore} from "@/stores/user"
 
 const userStore = useUserStore()
