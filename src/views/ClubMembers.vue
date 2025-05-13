@@ -14,6 +14,12 @@
 			>
 				Org Chart
 			</button>
+			<button
+				:class="[view === 'selectionOrder' ? activeClass : inactiveClass, 'rounded-r']"
+				@click="view = 'selectionOrder'"
+			>
+				SelectionOrder
+			</button>
 		</div>
 
 		<!-- Members View -->
@@ -46,11 +52,17 @@
 					>
 						<!-- Container ensures the image is square and centered -->
 						<div class="w-full md:width-48 aspect-square">
-							<img
-								:src="user.headshot_url"
-								alt="Headshot"
-								class="p-6 w-full h-full"
-								loading="lazy"
+							<img v-if="user.headshot_url"
+								 :src="user.headshot_url"
+								 alt="Headshot"
+								 class="p-6 w-full h-full"
+								 loading="lazy"
+							/>
+							<img v-else
+								 :src="fallbackHeadshotUrl"
+								 alt="Headshot"
+								 class="p-6 w-full h-full"
+								 loading="lazy"
 							/>
 						</div>
 						<div class="p-4 text-center">
@@ -92,27 +104,27 @@
 				<div class="w-full h-[300px] bg-gray-700 animate-pulse rounded"></div>
 			</div>
 		</div>
+
+		<!-- Selection Order View-->
+		<div v-else-if="view === 'selectionOrder'">
+			<SelectionOrder/>
+		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
 import {ref, onMounted} from 'vue';
 import {supabase} from "@/database/supabaseClient"
+import type {Tables} from "@/database/supabaseTypes.ts"
+import SelectionOrder from "@/components/selection/SelectionOrder.vue";
 
-// Define a TypeScript interface for a user
-interface User {
-	id: number;
-	display_name: string;
-	headshot_url: string;
-	club_title?: string;
-	letterboxd_name?: string;
-}
+type User = Tables<"users">
 
 // Reactive state variables
 const members = ref<User[]>([]);
 const loading = ref<boolean>(true);
 const error = ref<string | null>(null);
-const view = ref<'members' | 'orgchart'>('members');
+const view = ref<'members' | 'orgchart' | 'selectionOrder'>('members');
 
 // Toggle button styles for dark theme
 const activeClass = 'px-4 py-2 bg-black/50 text-white focus:outline-none';
@@ -121,6 +133,9 @@ const inactiveClass =
 
 // Number of skeleton cards to display while loading member data
 const skeletonCount = 6;
+
+// Fallback URL for image headshot in case one isn't found
+const fallbackHeadshotUrl = "https://fallbackurl.com"
 
 // Track if the org chart image has loaded
 const orgChartLoaded = ref<boolean>(false);
@@ -140,9 +155,9 @@ const fetchMembers = async () => {
 		members.value = data as User[];
 	}
 	loading.value = false;
-};
+}
 
 onMounted(() => {
-	fetchMembers();
-});
+	fetchMembers()
+})
 </script>

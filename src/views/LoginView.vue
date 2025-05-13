@@ -8,8 +8,9 @@
 		<div class="relative bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
 			<!-- Back Button: Display only if a login method is chosen -->
 			<button v-if="loginMethod !== null" @click="backToSelection" class="absolute left-4 top-4 p-2">
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24"
+					 stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
 				</svg>
 			</button>
 
@@ -17,12 +18,11 @@
 
 			<!-- Initial Choice: Select Login Method -->
 			<div v-if="loginMethod === null" class="mt-4">
-<!--				TODO: Add Back button to return to login page selection -->
 				<MovieClubButton @click="selectMethod('email')" button-text="Login with Email"
-						class="w-full mt-4">
+								 class="w-full mt-4">
 				</MovieClubButton>
 				<MovieClubButton @click="selectMethod('sms')" button-text="Login with SMS"
-						class="w-full mt-4">
+								 class="w-full mt-4">
 				</MovieClubButton>
 			</div>
 
@@ -52,7 +52,7 @@
 					<input v-model="sms.phone" type="tel" placeholder="555123456"
 						   class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-black">
 					<MovieClubButton @click="requestOtp" button-text="Send OTP"
-							class="w-full mt-4">
+									 class="w-full mt-4">
 					</MovieClubButton>
 				</div>
 
@@ -62,7 +62,7 @@
 					<input v-model="sms.otp" type="text" placeholder="OTP Code"
 						   class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-black">
 					<MovieClubButton @click="verifyOtp" button-text="Verify OTP"
-							class="w-full mt-4">
+									 class="w-full mt-4">
 					</MovieClubButton>
 				</div>
 			</div>

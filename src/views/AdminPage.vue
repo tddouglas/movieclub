@@ -6,6 +6,10 @@
 					  :options="activePoll.options" @poll-updated="handlePollUpdated(activePoll.id)"
 					  :ref="(el: Element | ComponentPublicInstance | null) => setPollRef(activePoll.id, el)"></PollCrud>
 		</CardBox>
+
+		<CardBox>
+			<PollUpdate />
+		</CardBox>
 	</div>
 </template>
 
@@ -17,6 +21,7 @@ import router from "@/router"
 import PollCrud from "@/components/polls/PollCRUD.vue";
 import CardBox from "@/components/movieClubUI/CardBox.vue";
 import type {Poll, PollCrudInstance} from "@/components/polls/pollTypes"
+import PollUpdate from "@/components/polls/PollUpdate.vue";
 
 const userStore = useUserStore()
 const userProfile = computed(() => userStore.profile);

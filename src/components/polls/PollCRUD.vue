@@ -293,7 +293,7 @@ const finalizePollClose = async (pollId: string, winningOptionId: string, movieT
 
 	const seasonId = seasonData.id;
 
-	// **Step 8**: Insert into club_sessions
+	// **Step 9**: Insert into club_sessions
 	await supabase
 		.from("club_sessions")
 		.insert([{
