@@ -24,3 +24,6 @@ stored_queries/
 
 # DB Assist functions
 dbbackup/
+
+#Assets
+supabase_assets/*

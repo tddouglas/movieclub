@@ -94,7 +94,7 @@ import MovieClubInputTitle from "@/components/movieClubUI/MovieClubInputTitle.vu
 
 
 const props = defineProps({
-	selectedPollId: {type: String as PropType<string | null>, required: true},
+	selectedPollId: {type: String, required: true},
 	question: {type: String, required: true},
 	options: {type: Array as PropType<PollOption[]>, required: true},
 })
