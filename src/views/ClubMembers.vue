@@ -83,7 +83,8 @@
         class="flex justify-center items-center min-h-[300px] relative"
     >
       <img
-          src="https://vuuwxeernvorwhkogrih.supabase.co/storage/v1/object/sign/assets/movieclub_orgchart.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80NThiNmI0NS02YjIxLTQ1YWMtYjVkNi1jYzU2NjE0MDZlMTIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvbW92aWVjbHViX29yZ2NoYXJ0LnBuZyIsImlhdCI6MTc1NTQ1NTU5MCwiZXhwIjoyMDcwODE1NTkwfQ.Rv4CwyHe6IDklWsI6rRqfvAWKpj74bCEmpwfxXU9MdY"
+          v-if="orgChartSignedUrl"
+          :src="orgChartSignedUrl"
           alt="Organization Chart"
           class="max-w-full h-auto transition-opacity duration-500"
           loading="lazy"
@@ -110,6 +111,7 @@ import {ref, onMounted} from 'vue';
 import {supabase} from "@/database/supabaseClient"
 import type {Tables} from "@/database/supabaseTypes.ts"
 import SelectionOrder from "@/components/selection/SelectionOrder.vue";
+import {getSignedUrls, getSignedUrl} from "@/composables/useSignedUrls";
 
 type User = Tables<"users">
 
@@ -131,6 +133,9 @@ const skeletonCount = 6;
 // Track if the org chart image has loaded
 const orgChartLoaded = ref<boolean>(false);
 
+// Signed URL for org chart
+const orgChartSignedUrl = ref<string | null>(null);
+
 // Function to fetch users from the Supabase table
 const fetchMembers = async () => {
   loading.value = true;
@@ -144,12 +149,26 @@ const fetchMembers = async () => {
   if (fetchError) {
     error.value = fetchError.message;
   } else if (data) {
-    members.value = data as User[];
+    // Get signed URLs for all headshots
+    const headshotUrls = data.map(u => u.headshot_url).filter((url): url is string => Boolean(url));
+    const signedUrlMap = await getSignedUrls(headshotUrls);
+    members.value = data.map(user => ({
+      ...user,
+      headshot_url: user.headshot_url ? signedUrlMap.get(user.headshot_url) ?? null : null
+    })) as User[];
   }
   loading.value = false;
 }
 
+// Function to load signed URL for org chart
+const loadOrgChartUrl = async () => {
+  orgChartSignedUrl.value = await getSignedUrl(
+    'https://pfzjqlnqszkkvaqonyge.supabase.co/storage/v1/object/authenticated/assets/movieclub_orgchart.png'
+  );
+}
+
 onMounted(() => {
   fetchMembers()
+  loadOrgChartUrl()
 })
 </script>

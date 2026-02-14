@@ -1,6 +1,7 @@
 import {ref} from "vue"
 import {defineStore} from "pinia"
 import {supabase} from "@/database/supabaseClient"
+import {getSignedUrl, clearSignedUrlCache} from "@/composables/useSignedUrls"
 
 export const useUserStore = defineStore("user", () => {
 	const authUser = ref()
@@ -48,6 +49,9 @@ export const useUserStore = defineStore("user", () => {
 			if (error) {
 				console.error("Error loading user profile:", error)
 				return
+			}
+			if (data.headshot_url) {
+				data.headshot_url = await getSignedUrl(data.headshot_url)
 			}
 			profile.value = data
 		}
@@ -114,6 +118,7 @@ export const useUserStore = defineStore("user", () => {
 		authUser.value = null
 		accessToken.value = ""
 		profile.value = null
+		clearSignedUrlCache()
 		return await supabase.auth.signOut()
 	}
 
